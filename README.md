@@ -176,7 +176,7 @@ I build intelligent, data-driven tools that make machine learning **accessible, 
 
 ## 📄 License
 
-This project is licensed under the **MIT License** — see [LICENSE](LICENSE) for details.
+This project was developed for academic purposes to predicts sentiment of text (positive/negative).
 
 ---
 
