@@ -1,0 +1,181 @@
+https://www.kaggle.com/code/lakshmi25npathi/sentiment-analysis-of-imdb-movie-reviews
+https://www.kaggle.com/datasets/vishakhdapat/imdb-movie-reviews
+
+🧠💬 AI Project -1: Sentiment Analysis
+
+🎯 1. Problem Statement
+
+Build a model that classifies text into:
+- Positive 😊
+- Negative 😡
+- (Optional: Neutral 😐)
+
+📊 2. Dataset
+
+Options:
+- IMDb movie reviews
+- Amazon product reviews
+- Twitter dataset
+
+Example format:
+- Text: "I love this product" → Sentiment: Positive
+- Text: "This is worst service" → Sentiment: Negative
+
+👉 Save as data.csv
+
+⚙️ 3. Setup (Libraries)
+
+import pandas as pd
+import numpy as np
+import re
+
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, classification_report
+
+🧹 4. Data Preprocessing (Very Important)
+
+Steps:
+- Lowercase text
+- Remove punctuation
+- Remove numbers
+- Remove stopwords
+
+Code:
+
+def clean_text(text):
+    text = text.lower()
+    text = re.sub(r'[^a-zA-Z]', ' ', text)
+    return text
+
+df = pd.read_csv("data.csv")
+df['cleaned'] = df['Text'].apply(clean_text)
+
+🔢 5. Convert Text → Numbers (Vectorization)
+
+👉 Use TF-IDF (best for beginners)
+
+vectorizer = TfidfVectorizer(max_features=5000)
+X = vectorizer.fit_transform(df['cleaned']).toarray()
+y = df['Sentiment']
+
+✂️ 6. Train-Test Split
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+🤖 7. Model Training
+
+👉 Use Logistic Regression (simple + powerful)
+
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+📊 8. Model Evaluation
+
+y_pred = model.predict(X_test)
+
+print("Accuracy:", accuracy_score(y_test, y_pred))
+print(classification_report(y_test, y_pred))
+
+👉 Good accuracy: 80–90%
+
+🧪 9. Test with Custom Input
+
+def predict_sentiment(text):
+    text = clean_text(text)
+    vector = vectorizer.transform().toarray()
+    return model.predict(vector)[text][0]
+
+print(predict_sentiment("This product is amazing"))
+
+💾 10. Save Model (Important for Deployment)
+
+import pickle
+
+pickle.dump(model, open("model.pkl", "wb"))
+pickle.dump(vectorizer, open("vectorizer.pkl", "wb"))
+
+🌐 11. Deployment using Streamlit (Simple UI)
+
+Create file: app.py
+
+import streamlit as st
+import pickle
+
+model = pickle.load(open("model.pkl", "rb"))
+vectorizer = pickle.load(open("vectorizer.pkl", "rb"))
+
+def predict(text):
+    vec = vectorizer.transform().toarray()
+    return model.predict(vec)[text][0]
+
+st.title("Sentiment Analysis App")
+
+user_input = st.text_input("Enter text")
+
+if st.button("Predict"):
+    result = predict(user_input)
+    st.write("Sentiment:", result)
+
+Run:
+
+streamlit run app.py
+
+📁 12. Project Structure
+
+sentiment-analysis/
+│
+├── data.csv
+├── model.pkl
+├── vectorizer.pkl
+├── app.py
+├── requirements.txt
+├── README.md
+
+📦 13. requirements.txt
+
+- pandas
+- numpy
+- scikit-learn
+- streamlit
+
+📝 14. README.md (Short Template)
+
+Sentiment Analysis Project
+
+Overview
+This project predicts sentiment of text (positive/negative).
+
+Tech Stack
+- Python
+- Scikit-learn
+- NLP (TF-IDF)
+- Streamlit
+
+Features
+- Text classification
+- Real-time prediction
+- Web app deployment
+
+How to Run
+streamlit run app.py
+
+🧠 15. What to Write in Resume
+
+Sentiment Analysis Project
+- Built NLP model to classify text sentiment using TF-IDF and Logistic Regression
+- Achieved ∼85% accuracy on test data
+- Developed and deployed interactive web app using Streamlit
+- Implemented text preprocessing and feature engineering
+
+⭐ 16. How to Make It Stand Out
+
+Add:
+- GitHub repo
+- Live demo (Streamlit Cloud)
+- Clean UI
+- Screenshot
+- Enhance the project with custom real-world data to showcase impact
